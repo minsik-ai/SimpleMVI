@@ -160,7 +160,6 @@ private class TodoListAdapter(
     init {
         disposables.addAll(
             dataObservable
-                .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     todoItems = it
