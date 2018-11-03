@@ -4,9 +4,9 @@ import com.trent.simplemvi.mvi.components.MviViewState
 
 sealed class MainViewState : MviViewState {
     data class TodoListViewState(val todoList: List<TodoItem>) : MviViewState
-    sealed class TextInputViewState(open val currentText: String) : MviViewState {
-        data class TodoAddViewState(override val currentText: String) : TextInputViewState(currentText)
-        data class TodoEditViewState(val editTarget: TodoItem, override val currentText: String): TextInputViewState(currentText)
+    sealed class TextInputViewState(open val hintText: String) : MviViewState {
+        data class TodoAddViewState(override val hintText: String) : TextInputViewState(hintText)
+        data class TodoEditViewState(val editTarget: TodoItem, override val hintText: String): TextInputViewState(hintText)
     }
 }
 
