@@ -84,6 +84,9 @@ class MainView(
 
         when (state) {
             is TodoListViewState -> {
+
+                Log.d("MainView", "New State : " + state)
+
                 todolist_layout.visibility = View.VISIBLE
 
                 if (state.selectedItem != null) {

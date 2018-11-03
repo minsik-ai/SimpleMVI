@@ -18,7 +18,7 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
         ObservableTransformer<MainIntent.ApplyAddTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
                 val newItem = model.addItem(intent.description)
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), true, newItem))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
             }
 
         }
@@ -34,14 +34,14 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
         ObservableTransformer<MainIntent.ApplyEditTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
                 val newItem = model.editItem(intent.editTarget, intent.newDescription)
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), false))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
             }
         }
 
     private val selectTodoIntentProcessor =
         ObservableTransformer<MainIntent.SelectTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), true, intent.todoItem))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
             }
         }
 
@@ -49,7 +49,7 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
         ObservableTransformer<MainIntent.ToggleDoneTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
                 model.toggleDone(intent.todoItem)
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), false))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
             }
         }
 
@@ -57,14 +57,14 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
         ObservableTransformer<MainIntent.DeleteTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
                 model.deleteItem(intent.todoItem)
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), true, null))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
             }
         }
 
     private val cancelTodoEditIntentProcessor =
         ObservableTransformer<MainIntent.CancelTodoEditIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
-                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), false))
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
             }
         }
 

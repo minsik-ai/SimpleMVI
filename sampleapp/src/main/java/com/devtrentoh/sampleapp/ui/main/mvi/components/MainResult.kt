@@ -9,7 +9,6 @@ sealed class MainResult : MviResult {
 
     data class SyncTodoListResult(
         val items: List<TodoItem>,
-        val selectedItemChanged: Boolean = false,
-        val newSelectedItem: TodoItem? = null
+        val newSelectedItem: TodoItem?
     ) : MainResult()
 }

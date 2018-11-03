@@ -14,7 +14,7 @@ class MainReducerHolder : MviReducerHolder<MainResult, MainViewState> {
                     is MainResult.OpenEditTodoResult -> MainViewState.TextInputViewState.TodoEditViewState(newResult.targetItem)
                     is MainResult.SyncTodoListResult -> prevState.copy(
                         todoList = newResult.items,
-                        selectedItem = if (newResult.selectedItemChanged) newResult.newSelectedItem else prevState.selectedItem
+                        selectedItem = newResult.newSelectedItem
                     )
                 }
             MainViewState.TextInputViewState.TodoAddViewState ->
