@@ -35,8 +35,8 @@ class MainView(
     val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
     val applyAddTodoSubject = PublishSubject.create<MainIntent.ApplyAddTodoIntent>()
 
-    val toggleSelectTodoItemSubject = PublishSubject.create<MainIntent.ToggleSelectTodoIntent>()
-    val checkDoneTodoSubject = PublishSubject.create<MainIntent.CheckDoneTodoIntent>()
+    val selectTodoItemSubject = PublishSubject.create<MainIntent.SelectTodoIntent>()
+    val toggleCheckDoneTodoSubject = PublishSubject.create<MainIntent.ToggleCheckDoneTodoIntent>()
 
     val openEditTodoSubject = PublishSubject.create<MainIntent.OpenEditTodoIntent>()
     val applyEditTodoSubject = PublishSubject.create<MainIntent.ApplyEditTodoIntent>()
@@ -45,8 +45,8 @@ class MainView(
         listOf(
             openAddTodoSubject,
             applyAddTodoSubject,
-            toggleSelectTodoItemSubject,
-            checkDoneTodoSubject,
+            selectTodoItemSubject,
+            toggleCheckDoneTodoSubject,
             openEditTodoSubject,
             applyEditTodoSubject
         )
@@ -113,8 +113,9 @@ class MainView(
         todoitem_list.apply {
             layoutManager = LinearLayoutManager(containerView?.context)
             adapter = TodoListAdapter(todoDataListSubject, selectedTodoIndexSubject,
-                onClickAction = { todoItem, _ ->
-                    toggleSelectTodoItemSubject.onNext(MainIntent.ToggleSelectTodoIntent(todoItem))
+                onClickAction = { todoItem, isSelected ->
+                    if (!isSelected) selectTodoItemSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
+                    else toggleCheckDoneTodoSubject.onNext(MainIntent.ToggleCheckDoneTodoIntent(todoItem))
                 }
             )
         }
