@@ -67,7 +67,7 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
                 Observable.just(MainResult.SyncTodoListResult(model.getItemList(), false))
             }
         }
-    
+
     override val intentProcessor = ObservableTransformer<MainIntent, MainResult> { intents ->
         intents.publish { shared ->
             Observable.merge(

@@ -117,8 +117,8 @@ class MainView(
         val buttonRTextResId = when (currentActionButtonR) {
             ActionButtonR.OPEN_ADD_TODO -> R.string.add_todo
             ActionButtonR.OPEN_EDIT_TODO -> R.string.edit_todo
-            ActionButtonR.APPLY_ADD_TODO -> R.string.apply_description
-            ActionButtonR.APPLY_EDIT_TODO -> R.string.apply_description
+            ActionButtonR.APPLY_ADD_TODO -> R.string.finish_add
+            ActionButtonR.APPLY_EDIT_TODO -> R.string.apply_edit
         }
 
         bottom_action_button_L.text = containerView?.context?.getText(buttonLTextResId)
@@ -127,8 +127,9 @@ class MainView(
 
     fun setup() {
         bottom_action_button_L.setOnClickListener {
-            when(currentActionButtonL) {
-                ActionButtonL.NOTHING -> {}
+            when (currentActionButtonL) {
+                ActionButtonL.NOTHING -> {
+                }
                 ActionButtonL.DELETE_TODO -> {
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
