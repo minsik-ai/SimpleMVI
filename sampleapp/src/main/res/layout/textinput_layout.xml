@@ -9,11 +9,10 @@
     <EditText
         android:id="@+id/text_input"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:gravity="top|start"
+        android:layout_height="wrap_content"
         android:hint="@string/todo_description"
         android:importantForAutofill="no"
-        android:inputType="textMultiLine"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

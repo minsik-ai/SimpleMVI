@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.todolist_layout.*
 import java.lang.NullPointerException
 
 class MainView(
-    val actionBar: ActionBar?, override val containerView: View?, private val viewModel: MainViewModel
+    private val actionBar: ActionBar?, override val containerView: View?, viewModel: MainViewModel
 ) : MviView<MainIntent, MainResult, MainViewState>(viewModel), LayoutContainer {
 
     val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
@@ -58,9 +58,12 @@ class MainView(
 
     private var currentActionButton = ActionButton.OPEN_ADD_TODO
 
-    private var prevState: MainViewState = viewModel.initialState
+    private var currentState: MainViewState = viewModel.initialState
 
     override fun render(state: MainViewState) {
+
+        currentState = state
+
         todolist_layout.visibility = View.GONE
         textinput_layout.visibility = View.GONE
 
@@ -84,7 +87,7 @@ class MainView(
                 if (state.selectedItem != null) selectedTodoIndexSubject.onNext(state.todoList.indexOf(state.selectedItem))
             }
             is TextInputViewState -> {
-                textinput_layout.visibility = View.GONE
+                textinput_layout.visibility = View.VISIBLE
                 text_input.hint = state.hintText
                 currentActionButton = when (state) {
                     is TodoAddViewState -> ActionButton.APPLY_ADD_TODO
@@ -108,7 +111,7 @@ class MainView(
                 ActionButton.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
                 ActionButton.OPEN_EDIT_TODO -> {
                     val selectedItem =
-                        (prevState as TodoListViewState).selectedItem ?: throw NullPointerException("No Selected Item")
+                        (currentState as TodoListViewState).selectedItem ?: throw NullPointerException("No Selected Item")
 
                     openEditTodoSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
                 }
@@ -116,7 +119,7 @@ class MainView(
                     applyAddTodoSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
                 }
                 ActionButton.APPLY_EDIT_TODO -> {
-                    val editTarget = (prevState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
+                    val editTarget = (currentState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
                     applyEditTodoSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
                 }
             }
@@ -197,7 +200,7 @@ private class TodoViewHolder(private val view: View) : RecyclerView.ViewHolder(v
         view.setBackgroundColor(
             ContextCompat.getColor(
                 view.context,
-                if (isSelected) R.color.colorPrimaryDark else R.color.colorPrimary
+                if (isSelected) R.color.gray else R.color.white
             )
         )
 
