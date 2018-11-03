@@ -36,7 +36,7 @@ class MainView(
     val applyAddTodoSubject = PublishSubject.create<MainIntent.ApplyAddTodoIntent>()
 
     val selectTodoItemSubject = PublishSubject.create<MainIntent.SelectTodoIntent>()
-    val toggleCheckDoneTodoSubject = PublishSubject.create<MainIntent.ToggleCheckDoneTodoIntent>()
+    val toggleCheckDoneTodoSubject = PublishSubject.create<MainIntent.ToggleDoneTodoIntent>()
 
     val openEditTodoSubject = PublishSubject.create<MainIntent.OpenEditTodoIntent>()
     val applyEditTodoSubject = PublishSubject.create<MainIntent.ApplyEditTodoIntent>()
@@ -67,18 +67,16 @@ class MainView(
             is TodoListViewState -> {
                 todolist_layout.visibility = View.VISIBLE
                 // TODO : Put items in recyclerview
-                if (state.selectedItem != null) {
-                    currentActionButton = ActionButton.OPEN_EDIT_TODO
-                } else {
-                    currentActionButton = ActionButton.OPEN_ADD_TODO
-                }
+                currentActionButton =
+                        if (state.selectedItem != null) ActionButton.OPEN_EDIT_TODO else ActionButton.OPEN_ADD_TODO
+
             }
             is TextInputViewState -> {
                 textinput_layout.visibility = View.GONE
                 text_input.hint = state.hintText
-                when (state) {
-                    is TodoAddViewState -> currentActionButton = ActionButton.APPLY_ADD_TODO
-                    is TodoEditViewState -> currentActionButton = ActionButton.APPLY_EDIT_TODO
+                currentActionButton = when (state) {
+                    is TodoAddViewState -> ActionButton.APPLY_ADD_TODO
+                    is TodoEditViewState -> ActionButton.APPLY_EDIT_TODO
                 }
             }
         }
@@ -115,7 +113,7 @@ class MainView(
             adapter = TodoListAdapter(todoDataListSubject, selectedTodoIndexSubject,
                 onClickAction = { todoItem, isSelected ->
                     if (!isSelected) selectTodoItemSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
-                    else toggleCheckDoneTodoSubject.onNext(MainIntent.ToggleCheckDoneTodoIntent(todoItem))
+                    else toggleCheckDoneTodoSubject.onNext(MainIntent.ToggleDoneTodoIntent(todoItem))
                 }
             )
         }
