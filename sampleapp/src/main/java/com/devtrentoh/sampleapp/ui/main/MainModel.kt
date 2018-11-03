@@ -24,12 +24,17 @@ class MainModel {
         return newItem
     }
 
+    fun deleteItem(todoItem: TodoItem) {
+        currentTodoItemList.remove(todoItem)
+        syncDB()
+    }
+
     fun toggleDone(todoItem: TodoItem) {
-        val target = todoItem ?: throw NullPointerException("No Edit Target Set")
+        val index = currentTodoItemList.indexOf(todoItem)
 
-        val index = currentTodoItemList.indexOf(target)
+        currentTodoItemList[index] = todoItem.copy(isDone = !todoItem.isDone)
 
-        currentTodoItemList[index] = target.copy(isDone = !target.isDone)
+        syncDB()
     }
 
     fun getItemList(): List<TodoItem> = currentTodoItemList

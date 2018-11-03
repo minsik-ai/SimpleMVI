@@ -9,10 +9,9 @@ sealed class MainIntent : MviIntent {
     data class OpenEditTodoIntent(val todoItem: TodoItem) : MainIntent()
     data class ApplyEditTodoIntent(val editTarget: TodoItem, val newDescription: String) : MainIntent()
 
-    data class SelectTodoIntent(val todoItem: TodoItem): MainIntent()
+    data class SelectTodoIntent(val todoItem: TodoItem) : MainIntent()
     data class ToggleDoneTodoIntent(val todoItem: TodoItem) : MainIntent()
 
-//    object CancelModifyTodoListIntent : MainIntent()
-
-    // TODO : DeleteToDoIntent
+    data class DeleteTodoIntent(val todoItem: TodoItem) : MainIntent()
+    object CancelTodoEditIntent : MainIntent()
 }

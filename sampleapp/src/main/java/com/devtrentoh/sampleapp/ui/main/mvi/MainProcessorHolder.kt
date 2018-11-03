@@ -53,6 +53,21 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
             }
         }
 
+    private val deleteTodoIntentProcessor =
+        ObservableTransformer<MainIntent.DeleteTodoIntent, MainResult.SyncTodoListResult> { intents ->
+            intents.flatMap { intent ->
+                model.deleteItem(intent.todoItem)
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), true, null))
+            }
+        }
+
+    private val cancelTodoEditIntentProcessor =
+        ObservableTransformer<MainIntent.CancelTodoEditIntent, MainResult.SyncTodoListResult> { intents ->
+            intents.flatMap { intent ->
+                Observable.just(MainResult.SyncTodoListResult(model.getItemList(), false))
+            }
+        }
+    
     override val intentProcessor = ObservableTransformer<MainIntent, MainResult> { intents ->
         intents.publish { shared ->
             Observable.merge(
@@ -62,7 +77,9 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
                     shared.ofType(MainIntent.OpenEditTodoIntent::class.java).compose(openEditTodoIntentProcessor),
                     shared.ofType(MainIntent.ApplyEditTodoIntent::class.java).compose(applyEditTodoIntentProcessor),
                     shared.ofType(MainIntent.SelectTodoIntent::class.java).compose(selectTodoIntentProcessor),
-                    shared.ofType(MainIntent.ToggleDoneTodoIntent::class.java).compose(toggleDoneTodoIntentProcessor)
+                    shared.ofType(MainIntent.ToggleDoneTodoIntent::class.java).compose(toggleDoneTodoIntentProcessor),
+                    shared.ofType(MainIntent.DeleteTodoIntent::class.java).compose(deleteTodoIntentProcessor),
+                    shared.ofType(MainIntent.CancelTodoEditIntent::class.java).compose(cancelTodoEditIntentProcessor)
                 )
             )
         }

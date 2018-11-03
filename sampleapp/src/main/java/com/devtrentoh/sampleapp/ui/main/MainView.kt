@@ -42,6 +42,9 @@ class MainView(
     val openEditTodoSubject = PublishSubject.create<MainIntent.OpenEditTodoIntent>()
     val applyEditTodoSubject = PublishSubject.create<MainIntent.ApplyEditTodoIntent>()
 
+    val deleteTodoSubject = PublishSubject.create<MainIntent.DeleteTodoIntent>()
+    val cancelTodoEditSubject = PublishSubject.create<MainIntent.CancelTodoEditIntent>()
+
     override fun intents() = Observable.merge(
         listOf(
             openAddTodoSubject,
@@ -49,7 +52,9 @@ class MainView(
             selectTodoItemSubject,
             toggleCheckDoneTodoSubject,
             openEditTodoSubject,
-            applyEditTodoSubject
+            applyEditTodoSubject,
+            deleteTodoSubject,
+            cancelTodoEditSubject
         )
     )
 
@@ -121,6 +126,18 @@ class MainView(
     }
 
     fun setup() {
+        bottom_action_button_L.setOnClickListener {
+            when(currentActionButtonL) {
+                ActionButtonL.NOTHING -> {}
+                ActionButtonL.DELETE_TODO -> {
+                    val selectedItem =
+                        (currentState as TodoListViewState).selectedItem
+                            ?: throw NullPointerException("No Selected Item")
+                    deleteTodoSubject.onNext(MainIntent.DeleteTodoIntent(selectedItem))
+                }
+                ActionButtonL.CANCEL_TODO -> cancelTodoEditSubject.onNext(MainIntent.CancelTodoEditIntent)
+            }
+        }
         bottom_action_button_R.setOnClickListener {
             when (currentActionButtonR) {
                 ActionButtonR.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
