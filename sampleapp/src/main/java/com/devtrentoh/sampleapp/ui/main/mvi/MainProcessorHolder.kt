@@ -26,7 +26,6 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
     private val openEditTodoIntentProcessor =
         ObservableTransformer<MainIntent.OpenEditTodoIntent, MainResult.OpenEditTodoResult> { intents ->
             intents.flatMap { intent ->
-                model.setEditTarget(intent.todoItem)
                 Observable.just(MainResult.OpenEditTodoResult(intent.todoItem))
             }
         }
@@ -34,7 +33,7 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
     private val applyEditTodoIntentProcessor =
         ObservableTransformer<MainIntent.ApplyEditTodoIntent, MainResult.SyncTodoListResult> { intents ->
             intents.flatMap { intent ->
-                val newItem = model.editItem(intent.newDescription)
+                val newItem = model.editItem(intent.editTarget, intent.newDescription)
                 Observable.just(MainResult.SyncTodoListResult(model.getItemList(), true, newItem))
             }
         }

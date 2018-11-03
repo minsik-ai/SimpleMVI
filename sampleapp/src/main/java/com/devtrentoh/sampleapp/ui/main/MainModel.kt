@@ -7,28 +7,18 @@ class MainModel {
 
     private var currentTodoItemList = mutableListOf<TodoItem>()
 
-    private var editTarget: TodoItem? = null
-
     fun addItem(description: String): TodoItem {
-        val newItem = TodoItem(TODO("Available index finder"), description)
+        val newItem = TodoItem(findAvailableIndex(), description)
         currentTodoItemList.add(newItem)
         syncDB()
         return newItem
     }
 
-    fun setEditTarget(editItem: TodoItem) {
-        editTarget = editItem
-    }
+    fun editItem(editTarget: TodoItem, newDescription: String): TodoItem {
+        val index = currentTodoItemList.indexOf(editTarget)
 
-    fun editItem(newDescription: String): TodoItem {
-        val target = editTarget ?: throw NullPointerException("No Edit Target Set")
-
-        val index = currentTodoItemList.indexOf(target)
-
-        val newItem = target.copy(description = newDescription)
+        val newItem = editTarget.copy(description = newDescription)
         currentTodoItemList[index] = newItem
-
-        editTarget = null
 
         syncDB()
         return newItem
@@ -44,8 +34,17 @@ class MainModel {
 
     fun getItemList(): List<TodoItem> = currentTodoItemList
 
+    private fun findAvailableIndex(): Int {
+        val sortedTodoItems = currentTodoItemList.toList().sortedBy { it.uniqueIndex }
+        var index = 0
+        for (todoItem in sortedTodoItems) {
+            if (todoItem.uniqueIndex != index) return index
+            index++
+        }
+        return index
+    }
 
     private fun syncDB() {
-        // TODO()
+        // TODO("Make this asychronous but ordered")
     }
 }

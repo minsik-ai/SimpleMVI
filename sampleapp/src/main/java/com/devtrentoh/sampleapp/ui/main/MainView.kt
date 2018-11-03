@@ -70,6 +70,9 @@ class MainView(
                 currentActionButton =
                         if (state.selectedItem != null) ActionButton.OPEN_EDIT_TODO else ActionButton.OPEN_ADD_TODO
 
+                todoDataListSubject.onNext(state.todoList)
+
+                if (state.selectedItem != null) selectedTodoIndexSubject.onNext(state.todoList.indexOf(state.selectedItem))
             }
             is TextInputViewState -> {
                 textinput_layout.visibility = View.GONE
@@ -81,13 +84,13 @@ class MainView(
             }
         }
 
-        // TODO : Set matching images
-        when (currentActionButton) {
-            ActionButton.OPEN_ADD_TODO -> TODO()
-            ActionButton.OPEN_EDIT_TODO -> TODO()
-            ActionButton.APPLY_ADD_TODO -> TODO()
-            ActionButton.APPLY_EDIT_TODO -> TODO()
-        }
+//        // TODO : Set matching images
+//        when (currentActionButton) {
+//            ActionButton.OPEN_ADD_TODO -> TODO()
+//            ActionButton.OPEN_EDIT_TODO -> TODO()
+//            ActionButton.APPLY_ADD_TODO -> TODO()
+//            ActionButton.APPLY_EDIT_TODO -> TODO()
+//        }
     }
 
     fun setup() {
@@ -104,7 +107,8 @@ class MainView(
                     applyAddTodoSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
                 }
                 ActionButton.APPLY_EDIT_TODO -> {
-                    applyEditTodoSubject.onNext(MainIntent.ApplyEditTodoIntent(text_input.text.toString()))
+                    val editTarget = (prevState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
+                    applyEditTodoSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
                 }
             }
         }
