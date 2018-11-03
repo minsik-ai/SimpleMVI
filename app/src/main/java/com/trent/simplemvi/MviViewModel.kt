@@ -1,6 +1,6 @@
 package com.trent.simplemvi
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviReducerHolder
 import com.trent.simplemvi.mvi.components.MviIntent

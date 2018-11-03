@@ -1,11 +1,10 @@
 package com.trent.simplemvi
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviReducerHolder
 import java.lang.reflect.InvocationTargetException
-
 
 class MviViewModelFactory(
     private val processorHolder: MviProcessorHolder<*, *>,

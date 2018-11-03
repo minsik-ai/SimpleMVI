@@ -1,8 +1,8 @@
 package com.trent.simplemvi
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import com.trent.simplemvi.mvi.components.MviIntent
 import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
