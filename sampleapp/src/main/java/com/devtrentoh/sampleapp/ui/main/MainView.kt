@@ -1,5 +1,6 @@
 package com.devtrentoh.sampleapp.ui.main
 
+import android.app.ActionBar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ import kotlinx.android.synthetic.main.todolist_layout.*
 import java.lang.NullPointerException
 
 class MainView(
-    override val containerView: View?, private val viewModel: MainViewModel
+    val actionBar: ActionBar?, override val containerView: View?, private val viewModel: MainViewModel
 ) : MviView<MainIntent, MainResult, MainViewState>(viewModel), LayoutContainer {
 
     val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
@@ -62,6 +63,14 @@ class MainView(
     override fun render(state: MainViewState) {
         todolist_layout.visibility = View.GONE
         textinput_layout.visibility = View.GONE
+
+        val actionBarTitle = when (state) {
+            is TodoListViewState -> "Todo List"
+            TodoAddViewState -> "Add Todo"
+            is TodoEditViewState -> "Edit Todo"
+        }
+
+        actionBar?.title = actionBarTitle
 
         when (state) {
             is TodoListViewState -> {
