@@ -1,6 +1,7 @@
 package com.devtrentoh.sampleapp.ui.main
 
 import android.app.Activity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,7 @@ class MainView(
     )
 
     private val todoDataListSubject = PublishSubject.create<List<TodoItem>>()
-    private val selectedTodoIndexSubject = PublishSubject.create<Int>()
+    private val selectedTodoItemSubject = PublishSubject.create<TodoItem>()
 
     private var currentActionButtonL = ActionButtonL.NOTHING
     private var currentActionButtonR = ActionButtonR.OPEN_ADD_TODO
@@ -95,11 +96,12 @@ class MainView(
 
                 todoDataListSubject.onNext(state.todoList)
 
-                if (state.selectedItem != null) selectedTodoIndexSubject.onNext(state.todoList.indexOf(state.selectedItem))
+                selectedTodoItemSubject.onNext(state.selectedItem ?: TodoItem(-1, ""))
             }
             is TextInputViewState -> {
                 textinput_layout.visibility = View.VISIBLE
                 text_input.hint = state.hintText
+                text_input.text.clear()
                 currentActionButtonL = ActionButtonL.CANCEL_TODO
                 currentActionButtonR = when (state) {
                     is TodoAddViewState -> ActionButtonR.APPLY_ADD_TODO
@@ -107,6 +109,7 @@ class MainView(
                 }
             }
         }
+
         val buttonLTextResId = when (currentActionButtonL) {
             ActionButtonL.NOTHING -> R.string.empty
             ActionButtonL.DELETE_TODO -> R.string.delete
@@ -160,7 +163,7 @@ class MainView(
         }
         todoitem_list.apply {
             layoutManager = LinearLayoutManager(containerView?.context)
-            adapter = TodoListAdapter(todoDataListSubject, selectedTodoIndexSubject,
+            adapter = TodoListAdapter(todoDataListSubject, selectedTodoItemSubject,
                 onClickAction = { todoItem, isSelected ->
                     if (!isSelected) selectTodoItemSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
                     else toggleCheckDoneTodoSubject.onNext(MainIntent.ToggleDoneTodoIntent(todoItem))
@@ -184,12 +187,12 @@ private enum class ActionButtonR {
 }
 
 private class TodoListAdapter(
-    dataObservable: Observable<List<TodoItem>>, selectedIndexObservable: Observable<Int>,
+    dataObservable: Observable<List<TodoItem>>, selectedItemObservable: Observable<TodoItem>,
     private val onClickAction: (TodoItem, Boolean) -> Unit
 ) : RecyclerView.Adapter<TodoViewHolder>() {
     private var todoItems = listOf<TodoItem>()
 
-    private var selectedIndex = -1
+    private var selectedPosition = -1
 
     // TODO : Dispose when needed
     private val disposables = CompositeDisposable()
@@ -202,14 +205,13 @@ private class TodoListAdapter(
                     todoItems = it
                     notifyDataSetChanged()
                 },
-            selectedIndexObservable
-                .distinctUntilChanged()
+            selectedItemObservable
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    val prevIndex = selectedIndex
-                    selectedIndex = it
-                    notifyItemChanged(prevIndex)
-                    notifyItemChanged(selectedIndex)
+                    val prevPosition = selectedPosition
+                    selectedPosition = todoItems.indexOf(it)
+                    notifyItemChanged(prevPosition)
+                    notifyItemChanged(selectedPosition)
                 }
         )
     }
@@ -224,7 +226,7 @@ private class TodoListAdapter(
     override fun getItemCount(): Int = todoItems.count()
 
     override fun onBindViewHolder(binder: TodoViewHolder, position: Int) {
-        val isSelected = position == selectedIndex
+        val isSelected = position == selectedPosition
         binder.bind(todoItems[position], isSelected, onClickAction)
     }
 

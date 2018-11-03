@@ -12,6 +12,7 @@ sealed class MainViewState : MviViewState {
 }
 
 data class TodoItem(val uniqueIndex: Int, val description: String, val isDone: Boolean = false) {
+
     override fun equals(other: Any?): Boolean {
         if (other !is TodoItem) return false
 
