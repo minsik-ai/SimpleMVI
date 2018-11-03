@@ -1,6 +1,5 @@
 package com.devtrentoh.sampleapp.ui.main
 
-import android.app.ActionBar
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
@@ -57,7 +56,8 @@ class MainView(
     private val todoDataListSubject = PublishSubject.create<List<TodoItem>>()
     private val selectedTodoIndexSubject = PublishSubject.create<Int>()
 
-    private var currentActionButton = ActionButton.OPEN_ADD_TODO
+    private var currentActionButtonL = ActionButtonL.NOTHING
+    private var currentActionButtonR = ActionButtonR.OPEN_ADD_TODO
 
     private var currentState: MainViewState = viewModel.initialState
 
@@ -79,9 +79,14 @@ class MainView(
         when (state) {
             is TodoListViewState -> {
                 todolist_layout.visibility = View.VISIBLE
-                // TODO : Put items in recyclerview
-                currentActionButton =
-                        if (state.selectedItem != null) ActionButton.OPEN_EDIT_TODO else ActionButton.OPEN_ADD_TODO
+
+                if (state.selectedItem != null) {
+                    currentActionButtonL = ActionButtonL.DELETE_TODO
+                    currentActionButtonR = ActionButtonR.OPEN_EDIT_TODO
+                } else {
+                    currentActionButtonL = ActionButtonL.NOTHING
+                    currentActionButtonR = ActionButtonR.OPEN_ADD_TODO
+                }
 
                 todoDataListSubject.onNext(state.todoList)
 
@@ -90,38 +95,46 @@ class MainView(
             is TextInputViewState -> {
                 textinput_layout.visibility = View.VISIBLE
                 text_input.hint = state.hintText
-                currentActionButton = when (state) {
-                    is TodoAddViewState -> ActionButton.APPLY_ADD_TODO
-                    is TodoEditViewState -> ActionButton.APPLY_EDIT_TODO
+                currentActionButtonL = ActionButtonL.CANCEL_TODO
+                currentActionButtonR = when (state) {
+                    is TodoAddViewState -> ActionButtonR.APPLY_ADD_TODO
+                    is TodoEditViewState -> ActionButtonR.APPLY_EDIT_TODO
                 }
             }
         }
-
-        val buttonTextResId = when (currentActionButton) {
-            ActionButton.OPEN_ADD_TODO -> R.string.add_todo
-            ActionButton.OPEN_EDIT_TODO -> R.string.edit_todo
-            ActionButton.APPLY_ADD_TODO -> R.string.apply_description
-            ActionButton.APPLY_EDIT_TODO -> R.string.apply_description
+        val buttonLTextResId = when (currentActionButtonL) {
+            ActionButtonL.NOTHING -> R.string.empty
+            ActionButtonL.DELETE_TODO -> R.string.delete
+            ActionButtonL.CANCEL_TODO -> R.string.cancel
         }
 
-        bottom_action_button.text = containerView?.context?.getText(buttonTextResId)
+
+        val buttonRTextResId = when (currentActionButtonR) {
+            ActionButtonR.OPEN_ADD_TODO -> R.string.add_todo
+            ActionButtonR.OPEN_EDIT_TODO -> R.string.edit_todo
+            ActionButtonR.APPLY_ADD_TODO -> R.string.apply_description
+            ActionButtonR.APPLY_EDIT_TODO -> R.string.apply_description
+        }
+
+        bottom_action_button_L.text = containerView?.context?.getText(buttonLTextResId)
+        bottom_action_button_R.text = containerView?.context?.getText(buttonRTextResId)
     }
 
     fun setup() {
-        bottom_action_button.setOnClickListener {
-            when (currentActionButton) {
-                ActionButton.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
-                ActionButton.OPEN_EDIT_TODO -> {
+        bottom_action_button_R.setOnClickListener {
+            when (currentActionButtonR) {
+                ActionButtonR.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
+                ActionButtonR.OPEN_EDIT_TODO -> {
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
                             ?: throw NullPointerException("No Selected Item")
 
                     openEditTodoSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
                 }
-                ActionButton.APPLY_ADD_TODO -> {
+                ActionButtonR.APPLY_ADD_TODO -> {
                     applyAddTodoSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
                 }
-                ActionButton.APPLY_EDIT_TODO -> {
+                ActionButtonR.APPLY_EDIT_TODO -> {
                     val editTarget = (currentState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
                     applyEditTodoSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
                 }
@@ -139,7 +152,13 @@ class MainView(
     }
 }
 
-enum class ActionButton {
+private enum class ActionButtonL {
+    NOTHING,
+    DELETE_TODO,
+    CANCEL_TODO
+}
+
+private enum class ActionButtonR {
     OPEN_ADD_TODO,
     OPEN_EDIT_TODO,
     APPLY_ADD_TODO,

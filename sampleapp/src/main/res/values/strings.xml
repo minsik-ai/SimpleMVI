@@ -4,4 +4,7 @@
     <string name="todo_description">Todo Description</string>
     <string name="edit_todo">Edit Todo</string>
     <string name="apply_description">Apply Description</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty" />
 </resources>

@@ -30,7 +30,21 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/bottom_action_button"
+            android:id="@+id/bottom_action_button_L"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/delete"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bottom_action_button_R"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
