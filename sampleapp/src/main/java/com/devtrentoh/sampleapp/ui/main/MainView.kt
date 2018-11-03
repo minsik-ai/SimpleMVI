@@ -1,6 +1,14 @@
 package com.devtrentoh.sampleapp.ui.main
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.devtrentoh.sampleapp.R
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainIntent
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainResult
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState
@@ -11,6 +19,8 @@ import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState.TodoListVie
 import com.devtrentoh.sampleapp.ui.main.mvi.components.TodoItem
 import com.trent.simplemvi.MviView
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -25,25 +35,25 @@ class MainView(
     val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
     val applyAddTodoSubject = PublishSubject.create<MainIntent.ApplyAddTodoIntent>()
 
-    val selectTodoSubject = PublishSubject.create<MainIntent.SelectTodoIntent>()
+    val toggleSelectTodoItemSubject = PublishSubject.create<MainIntent.ToggleSelectTodoIntent>()
     val checkDoneTodoSubject = PublishSubject.create<MainIntent.CheckDoneTodoIntent>()
 
     val openEditTodoSubject = PublishSubject.create<MainIntent.OpenEditTodoIntent>()
     val applyEditTodoSubject = PublishSubject.create<MainIntent.ApplyEditTodoIntent>()
 
-//    val cancelModifyTodoListSubject = PublishSubject.create<MainIntent.CancelModifyTodoListIntent>()
-
     override fun intents() = Observable.merge(
         listOf(
             openAddTodoSubject,
             applyAddTodoSubject,
-            selectTodoSubject,
+            toggleSelectTodoItemSubject,
             checkDoneTodoSubject,
             openEditTodoSubject,
             applyEditTodoSubject
-//            cancelModifyTodoListSubject
         )
     )
+
+    private val todoDataListSubject = PublishSubject.create<List<TodoItem>>()
+    private val selectedTodoIndexSubject = PublishSubject.create<Int>()
 
     private var currentActionButton = ActionButton.OPEN_ADD_TODO
 
@@ -100,6 +110,14 @@ class MainView(
                 }
             }
         }
+        todoitem_list.apply {
+            layoutManager = LinearLayoutManager(containerView?.context)
+            adapter = TodoListAdapter(todoDataListSubject, selectedTodoIndexSubject,
+                onClickAction = { todoItem, _ ->
+                    toggleSelectTodoItemSubject.onNext(MainIntent.ToggleSelectTodoIntent(todoItem))
+                }
+            )
+        }
     }
 }
 
@@ -108,4 +126,75 @@ enum class ActionButton {
     OPEN_EDIT_TODO,
     APPLY_ADD_TODO,
     APPLY_EDIT_TODO
+}
+
+private class TodoListAdapter(
+    dataObservable: Observable<List<TodoItem>>, selectedIndexObservable: Observable<Int>,
+    private val onClickAction: (TodoItem, Boolean) -> Unit
+) : RecyclerView.Adapter<TodoViewHolder>() {
+    private var todoItems = listOf<TodoItem>()
+
+    private var selectedIndex = -1
+
+    // TODO : Dispose when needed
+    private val disposables = CompositeDisposable()
+
+    init {
+        disposables.addAll(
+            dataObservable
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    todoItems = it
+                    notifyDataSetChanged()
+                },
+            selectedIndexObservable
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val prevIndex = selectedIndex
+                    selectedIndex = it
+                    notifyItemChanged(prevIndex)
+                    notifyItemChanged(selectedIndex)
+                }
+        )
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+        val todoItemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.todo_item, parent, false)
+
+        return TodoViewHolder(todoItemView)
+    }
+
+    override fun getItemCount(): Int = todoItems.count()
+
+    override fun onBindViewHolder(binder: TodoViewHolder, position: Int) {
+        val isSelected = position == selectedIndex
+        binder.bind(todoItems[position], isSelected, onClickAction)
+    }
+
+}
+
+private class TodoViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    private val descriptionText = view.findViewById<TextView>(R.id.todo_description_text)
+    private val checkBox = view.findViewById<CheckBox>(R.id.todo_done_check)
+
+    fun bind(todoItem: TodoItem, isSelected: Boolean, onClickAction: (TodoItem, Boolean) -> Unit) {
+
+        view.setBackgroundColor(
+            ContextCompat.getColor(
+                view.context,
+                if (isSelected) R.color.colorPrimaryDark else R.color.colorPrimary
+            )
+        )
+
+        descriptionText.text = todoItem.description
+        checkBox.isChecked = todoItem.isDone
+
+        view.setOnClickListener {
+            onClickAction(todoItem, isSelected)
+        }
+    }
+
 }

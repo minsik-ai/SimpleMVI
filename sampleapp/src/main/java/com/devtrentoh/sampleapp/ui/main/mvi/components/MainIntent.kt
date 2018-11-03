@@ -11,7 +11,7 @@ sealed class MainIntent : MviIntent {
     data class OpenEditTodoIntent(val todoItem: TodoItem) : MainIntent()
     data class ApplyEditTodoIntent(val newDescription: String) : MainIntent()
 
-    data class SelectTodoIntent(val todoItem: TodoItem): MainIntent()
+    data class ToggleSelectTodoIntent(val todoItem: TodoItem): MainIntent()
 
 //    object CancelModifyTodoListIntent : MainIntent()
 
