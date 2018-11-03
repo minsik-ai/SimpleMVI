@@ -35,7 +35,7 @@ class MainFragment : Fragment() {
                 MainReducerHolder()
             )
         ).get(MainViewModel::class.java)
-        MainView(this.activity?.actionBar, this.view, viewModel).apply {
+        MainView(this.activity, this.view, viewModel).apply {
             lifecycle.addObserver(this)
             setup()
         }

@@ -1,6 +1,7 @@
 package com.devtrentoh.sampleapp.ui.main
 
 import android.app.ActionBar
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,7 @@ import kotlinx.android.synthetic.main.todolist_layout.*
 import java.lang.NullPointerException
 
 class MainView(
-    private val actionBar: ActionBar?, override val containerView: View?, viewModel: MainViewModel
+    private val activity: Activity?, override val containerView: View?, viewModel: MainViewModel
 ) : MviView<MainIntent, MainResult, MainViewState>(viewModel), LayoutContainer {
 
     val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
@@ -73,7 +74,7 @@ class MainView(
             is TodoEditViewState -> "Edit Todo"
         }
 
-        actionBar?.title = actionBarTitle
+        activity?.title = actionBarTitle
 
         when (state) {
             is TodoListViewState -> {
@@ -95,14 +96,15 @@ class MainView(
                 }
             }
         }
+        
+        val buttonTextResId = when (currentActionButton) {
+            ActionButton.OPEN_ADD_TODO -> R.string.add_todo
+            ActionButton.OPEN_EDIT_TODO -> R.string.edit_todo
+            ActionButton.APPLY_ADD_TODO -> R.string.apply_description
+            ActionButton.APPLY_EDIT_TODO -> R.string.apply_description
+        }
 
-//        // TODO : Set matching images
-//        when (currentActionButton) {
-//            ActionButton.OPEN_ADD_TODO -> TODO()
-//            ActionButton.OPEN_EDIT_TODO -> TODO()
-//            ActionButton.APPLY_ADD_TODO -> TODO()
-//            ActionButton.APPLY_EDIT_TODO -> TODO()
-//        }
+        bottom_action_button.text = containerView?.context?.getText(buttonTextResId)
     }
 
     fun setup() {
@@ -111,7 +113,8 @@ class MainView(
                 ActionButton.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
                 ActionButton.OPEN_EDIT_TODO -> {
                     val selectedItem =
-                        (currentState as TodoListViewState).selectedItem ?: throw NullPointerException("No Selected Item")
+                        (currentState as TodoListViewState).selectedItem
+                            ?: throw NullPointerException("No Selected Item")
 
                     openEditTodoSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
                 }

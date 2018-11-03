@@ -2,4 +2,6 @@
     <string name="app_name">SampleApp</string>
     <string name="add_todo">Add Todo</string>
     <string name="todo_description">Todo Description</string>
+    <string name="edit_todo">Edit Todo</string>
+    <string name="apply_description">Apply Description</string>
 </resources>
