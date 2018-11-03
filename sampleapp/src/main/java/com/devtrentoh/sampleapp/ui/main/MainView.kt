@@ -96,7 +96,7 @@ class MainView(
                 }
             }
         }
-        
+
         val buttonTextResId = when (currentActionButton) {
             ActionButton.OPEN_ADD_TODO -> R.string.add_todo
             ActionButton.OPEN_EDIT_TODO -> R.string.edit_todo
