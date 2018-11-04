@@ -1,4 +1,4 @@
-# SimpleMVI
+# SimpleMVI [ ![Download](https://api.bintray.com/packages/trent-dev/com.trent.simplemvi/simplemvi/images/download.svg) ](https://bintray.com/trent-dev/com.trent.simplemvi/simplemvi/_latestVersion)
 
 Lightweight Android MVI library for uni-directional architecture.
 
