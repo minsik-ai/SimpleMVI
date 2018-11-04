@@ -95,4 +95,6 @@ I recommend you to find your workflow as well.
 7. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well.
 8. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
 
+After initial configuration, you will find that modification is a breeze.
+
 See `sampleapp` module for detailed recommended usage.
