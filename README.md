@@ -29,6 +29,8 @@ RxJava 2 is required.
 
 ## How to use
 
+### Initial Setup
+
 Let's say we want to create a screen with name `Main`.
 
 Start by creating `sealed class` for each of the required components, `Intent`, `Result` and `ViewState`.
@@ -79,7 +81,9 @@ MainView(this.view, viewModel).apply {
 
 You may need more methods & parameters for your classes depending on how you initialize your View references etc.
 
-Now, whichever way you go about configuring MVI is fine, I usually go back and forth, but generally I do this.
+### Configuration Workflow
+
+Whichever way you go about configuring MVI is fine, I usually go back and forth, but generally I do this.
 I recommend you to find your workflow as well.
 
 1. Draw XML layouts.
