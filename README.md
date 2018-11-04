@@ -79,7 +79,8 @@ MainView(this.view, viewModel).apply {
 
 You may need more methods & parameters for your classes depending on how you initialize your View references etc.
 
-Now, whichever way you go about configuring MVI is fine, I usually go back and forth, but generally I do this: 
+Now, whichever way you go about configuring MVI is fine, I usually go back and forth, but generally I do this.
+I recommend you to find your workflow as well.
 
 1. Draw XML layouts.
 2. Sketch possible states of the view with `ViewState`.
