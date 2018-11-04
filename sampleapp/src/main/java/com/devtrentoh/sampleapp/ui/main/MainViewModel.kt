@@ -1,6 +1,8 @@
 package com.devtrentoh.sampleapp.ui.main
 
 import androidx.lifecycle.ViewModel
+import com.devtrentoh.sampleapp.ui.main.mvi.MainProcessorHolder
+import com.devtrentoh.sampleapp.ui.main.mvi.MainReducerHolder
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainIntent
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainResult
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState
@@ -10,8 +12,8 @@ import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviReducerHolder
 
 class MainViewModel(
-    processorHolder: MviProcessorHolder<MainIntent, MainResult>,
-    reducerHolder: MviReducerHolder<MainResult, MainViewState>
+    processorHolder: MainProcessorHolder,
+    reducerHolder: MainReducerHolder
 ) : MviViewModel<MainIntent, MainResult, MainViewState>(processorHolder, reducerHolder) {
 
     override val initialState: MainViewState = TodoListViewState(emptyList())
