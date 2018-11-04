@@ -1,4 +1,5 @@
 # SimpleMVI
+[ ![Download](https://api.bintray.com/packages/trent-dev/com.trent.simplemvi/simplemvi/images/download.svg) ](https://bintray.com/trent-dev/com.trent.simplemvi/simplemvi/_latestVersion)
 
 Lightweight Android MVI library for uni-directional architecture.
 
@@ -90,7 +91,7 @@ I recommend you to find your workflow as well.
 2. Sketch possible states of the view with `ViewState`.
 3. Configure `render()` method of `MainView` such that view is drawn correctly according to `ViewState`.
 4. Sketch possible actions that user will take to change the view with `Intent`.
-5. Configure `intents()` method of `MainView` such that user actions will be taken properly to `MainViewModel`.
+5. Configure `intents()` method of `MainView` such that user actions will be passed properly to `MainViewModel`.
 6. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent`.
 7. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well.
 8. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
