@@ -12,8 +12,8 @@ import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviReducerHolder
 
 class MainViewModel(
-    processorHolder: MainProcessorHolder,
-    reducerHolder: MainReducerHolder
+    processorHolder: MviProcessorHolder<MainIntent, MainResult>,
+    reducerHolder: MviReducerHolder<MainResult, MainViewState>
 ) : MviViewModel<MainIntent, MainResult, MainViewState>(processorHolder, reducerHolder) {
 
     override val initialState: MainViewState = TodoListViewState(emptyList())
