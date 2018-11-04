@@ -56,8 +56,8 @@ Create a `ViewModel` & `View` as well.
 
 ```
 class MainViewModel(
-  processorHolder: MainProcessorHolder,
-  reducerHolder: MainReducerHolder
+  processorHolder: MviProcessorHolder<MainIntent, MainResult>,
+  reducerHolder: MviReducerHolder<MainResult, MainViewState>
   ) : MviViewModel<MainIntent, MainResult, MainViewState>(processorHolder, reducerHolder)
   
 class MainView(containerView: View, viewModel: MainViewModel) : MviView<MainIntent, MainResult, MainViewState>(viewModel)
