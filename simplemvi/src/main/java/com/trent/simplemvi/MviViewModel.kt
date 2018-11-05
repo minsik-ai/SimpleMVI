@@ -19,6 +19,8 @@ abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(
 
     abstract val initialState: S
 
+    private var cachedState: S? = null
+
     fun processIntents(intents: Observable<I>): Disposable {
         return intents.subscribe { intentsSubject.onNext(it) }
     }
@@ -26,6 +28,7 @@ abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(
     fun states(): Observable<S> {
         return intentsSubject
             .compose(processorHolder.intentProcessor)
-            .scan(initialState, reducerHolder.resultReducer)
+            .scan(cachedState ?: initialState, reducerHolder.resultReducer)
+            .doOnNext { cachedState = it }
     }
 }
