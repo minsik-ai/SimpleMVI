@@ -23,7 +23,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 ### Gradle
 
 ```
-implementation 'com.trent.simplemvi:simplemvi:0.8'
+implementation 'com.trent.simplemvi:simplemvi:0.8.1'
 ```
 
 RxJava 2 is required.
@@ -59,7 +59,7 @@ class MainViewModel(
   processorHolder: MviProcessorHolder<MainIntent, MainResult>,
   reducerHolder: MviReducerHolder<MainResult, MainViewState>
   ) : MviViewModel<MainIntent, MainResult, MainViewState>(processorHolder, reducerHolder)
-  
+
 class MainView(containerView: View, viewModel: MainViewModel) : MviView<MainIntent, MainResult, MainViewState>(viewModel)
 ```
 
@@ -73,7 +73,7 @@ viewModel = ViewModelProviders.of(
     MainReducerHolder()
   )
 ).get(MainViewModel::class.java)
-  
+
 MainView(this.view, viewModel).apply {
   lifecycle.addObserver(this)
   setup()
