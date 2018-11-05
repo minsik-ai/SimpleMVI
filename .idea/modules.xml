@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SimpleMVI.iml" filepath="$PROJECT_DIR$/SimpleMVI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleMVI.iml" filepath="$PROJECT_DIR$/SimpleMVI.iml" />
       <module fileurl="file://$PROJECT_DIR$/sampleapp/sampleapp.iml" filepath="$PROJECT_DIR$/sampleapp/sampleapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sampleapp/sampleapp.iml" filepath="$PROJECT_DIR$/sampleapp/sampleapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simplemvi/simplemvi.iml" filepath="$PROJECT_DIR$/simplemvi/simplemvi.iml" />
       <module fileurl="file://$PROJECT_DIR$/simplemvi/simplemvi.iml" filepath="$PROJECT_DIR$/simplemvi/simplemvi.iml" />
     </modules>
   </component>

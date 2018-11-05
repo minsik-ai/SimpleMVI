@@ -8,7 +8,6 @@ import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 
 abstract class MviView<I : MviIntent, R : MviResult, S : MviViewState>(private val viewModel: MviViewModel<I, R, S>) :
     LifecycleObserver {
@@ -23,7 +22,6 @@ abstract class MviView<I : MviIntent, R : MviResult, S : MviViewState>(private v
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
-        Timber.d("onStart")
         disposables.add(viewModel.states().subscribe(this::render))
         // Pass the UI's intents to the ViewModel
         disposables.add(viewModel.processIntents(intents()))
@@ -31,7 +29,6 @@ abstract class MviView<I : MviIntent, R : MviResult, S : MviViewState>(private v
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
-        Timber.d("onStop")
         disposables.clear()
     }
 }
