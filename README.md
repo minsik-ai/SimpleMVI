@@ -23,7 +23,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 ### Gradle
 
 ```
-implementation 'com.trent.simplemvi:simplemvi:0.8.1'
+implementation 'com.trent.simplemvi:simplemvi:0.8.2'
 ```
 
 RxJava 2 is required.
