@@ -241,19 +241,12 @@ private class TodoViewHolder(private val view: View) : RecyclerView.ViewHolder(v
 
     fun bind(todoItem: TodoItem, isSelected: Boolean, onClickAction: (TodoItem, Boolean) -> Unit) {
 
-        view.setBackgroundColor(
-            ContextCompat.getColor(
-                view.context,
-                if (isSelected) R.color.gray else R.color.white
-            )
-        )
+        view.setBackgroundColor(ContextCompat.getColor(view.context, if (isSelected) R.color.gray else R.color.white))
 
         descriptionText.text = todoItem.description
         checkBox.isChecked = todoItem.isDone
 
-        view.setOnClickListener {
-            onClickAction(todoItem, isSelected)
-        }
+        view.setOnClickListener { onClickAction(todoItem, isSelected) }
     }
 
 }
