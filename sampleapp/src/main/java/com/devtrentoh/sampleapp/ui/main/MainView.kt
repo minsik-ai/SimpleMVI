@@ -34,31 +34,6 @@ class MainView(
     private val activity: Activity?, override val containerView: View?, viewModel: MainViewModel
 ) : MviView<MainIntent, MainResult, MainViewState>(viewModel), LayoutContainer {
 
-    val openAddTodoSubject = PublishSubject.create<MainIntent.OpenAddTodoIntent>()
-    val applyAddTodoSubject = PublishSubject.create<MainIntent.ApplyAddTodoIntent>()
-
-    val selectTodoItemSubject = PublishSubject.create<MainIntent.SelectTodoIntent>()
-    val toggleCheckDoneTodoSubject = PublishSubject.create<MainIntent.ToggleDoneTodoIntent>()
-
-    val openEditTodoSubject = PublishSubject.create<MainIntent.OpenEditTodoIntent>()
-    val applyEditTodoSubject = PublishSubject.create<MainIntent.ApplyEditTodoIntent>()
-
-    val deleteTodoSubject = PublishSubject.create<MainIntent.DeleteTodoIntent>()
-    val cancelTodoEditSubject = PublishSubject.create<MainIntent.CancelTodoEditIntent>()
-
-    override fun intents() = Observable.merge(
-        listOf(
-            openAddTodoSubject,
-            applyAddTodoSubject,
-            selectTodoItemSubject,
-            toggleCheckDoneTodoSubject,
-            openEditTodoSubject,
-            applyEditTodoSubject,
-            deleteTodoSubject,
-            cancelTodoEditSubject
-        )
-    )
-
     private val todoDataListSubject = PublishSubject.create<List<TodoItem>>()
     private val selectedTodoItemSubject = PublishSubject.create<TodoItem>()
 
@@ -140,27 +115,27 @@ class MainView(
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
                             ?: throw NullPointerException("No Selected Item")
-                    deleteTodoSubject.onNext(MainIntent.DeleteTodoIntent(selectedItem))
+                    intentsSubject.onNext(MainIntent.DeleteTodoIntent(selectedItem))
                 }
-                ActionButtonL.CANCEL_TODO -> cancelTodoEditSubject.onNext(MainIntent.CancelTodoEditIntent)
+                ActionButtonL.CANCEL_TODO -> intentsSubject.onNext(MainIntent.CancelTodoEditIntent)
             }
         }
         bottom_action_button_R.setOnClickListener {
             when (currentActionButtonR) {
-                ActionButtonR.OPEN_ADD_TODO -> openAddTodoSubject.onNext(MainIntent.OpenAddTodoIntent)
+                ActionButtonR.OPEN_ADD_TODO -> intentsSubject.onNext(MainIntent.OpenAddTodoIntent)
                 ActionButtonR.OPEN_EDIT_TODO -> {
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
                             ?: throw NullPointerException("No Selected Item")
 
-                    openEditTodoSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
+                    intentsSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
                 }
                 ActionButtonR.APPLY_ADD_TODO -> {
-                    applyAddTodoSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
+                    intentsSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
                 }
                 ActionButtonR.APPLY_EDIT_TODO -> {
                     val editTarget = (currentState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
-                    applyEditTodoSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
+                    intentsSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
                 }
             }
         }
@@ -168,8 +143,8 @@ class MainView(
             layoutManager = LinearLayoutManager(containerView?.context)
             adapter = TodoListAdapter(todoDataListSubject, selectedTodoItemSubject,
                 onClickAction = { todoItem, isSelected ->
-                    if (!isSelected) selectTodoItemSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
-                    else toggleCheckDoneTodoSubject.onNext(MainIntent.ToggleDoneTodoIntent(todoItem))
+                    if (!isSelected) intentsSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
+                    else intentsSubject.onNext(MainIntent.ToggleDoneTodoIntent(todoItem))
                 }
             )
         }

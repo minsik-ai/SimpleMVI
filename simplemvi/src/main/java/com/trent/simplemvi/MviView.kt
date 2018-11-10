@@ -8,10 +8,14 @@ import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.PublishSubject
 
 abstract class MviView<I : MviIntent, R : MviResult, S : MviViewState>(private val viewModel: MviViewModel<I, R, S>) :
     LifecycleObserver {
-    abstract fun intents(): Observable<I>
+
+    protected val intentsSubject = PublishSubject.create<I>()
+
+    private fun intents(): Observable<I> = intentsSubject
 
     abstract fun render(state: S)
 
