@@ -8,53 +8,52 @@ import com.trent.simplemvi.mvi.MviProcessorHolderImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult> {
+class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult>() {
 
     private val openAddTodoIntentProcessor =
-        { intent: MainIntent.OpenAddTodoIntent -> Observable.just(MainResult.OpenAddTodoResult) }
+        { intent: MainIntent.OpenAddTodoIntent -> listOf(MainResult.OpenAddTodoResult) }
 
     private val applyAddTodoIntentProcessor =
         { intent: MainIntent.ApplyAddTodoIntent ->
             val newItem = model.addItem(intent.description)
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), null))
         }
 
     private val openEditTodoIntentProcessor =
         { intent: MainIntent.OpenEditTodoIntent ->
-            Observable.just(MainResult.OpenEditTodoResult(intent.todoItem))
+            listOf(MainResult.OpenEditTodoResult(intent.todoItem))
         }
 
     private val applyEditTodoIntentProcessor =
         { intent: MainIntent.ApplyEditTodoIntent ->
             val newItem = model.editItem(intent.editTarget, intent.newDescription)
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), null))
         }
 
     private val selectTodoIntentProcessor =
         { intent: MainIntent.SelectTodoIntent ->
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
         }
 
     private val toggleDoneTodoIntentProcessor =
         { intent: MainIntent.ToggleDoneTodoIntent ->
             model.toggleDone(intent.todoItem)
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), intent.todoItem))
         }
 
     private val deleteTodoIntentProcessor =
         { intent: MainIntent.DeleteTodoIntent ->
             model.deleteItem(intent.todoItem)
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), null))
         }
 
 
     private val cancelTodoEditIntentProcessor =
         { intent: MainIntent.CancelTodoEditIntent ->
-            Observable.just(MainResult.SyncTodoListResult(model.getItemList(), null))
+            listOf(MainResult.SyncTodoListResult(model.getItemList(), null))
         }
 
-    override val intentProcessor = ObservableTransformer<MainIntent, MainResult> { intents ->
-        intents.flatMap { intent: MainIntent ->
+    override val intentProcessorLogic: (MainIntent) -> List<MainResult> = { intent ->
             when (intent) {
                 is MainIntent.OpenAddTodoIntent -> openAddTodoIntentProcessor(intent)
                 is MainIntent.ApplyAddTodoIntent -> applyAddTodoIntentProcessor(intent)
@@ -66,6 +65,4 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl
                 is MainIntent.CancelTodoEditIntent -> cancelTodoEditIntentProcessor(intent)
             }
         }
-    }
-
 }

@@ -7,9 +7,9 @@ import io.reactivex.ObservableTransformer
 
 abstract class MviProcessorHolderImpl<I : MviIntent, R : MviResult> : MviProcessorHolder<I, R> {
 
-    abstract val processorLogic: Function1<I, List<R>>
+    abstract val intentProcessorLogic: Function1<I, List<R>>
 
     final override val intentProcessor = ObservableTransformer<I, R> { intents ->
-        intents.flatMap { intent: I -> Observable.just(processorLogic(intent)).concatMapIterable { it -> it } }
+        intents.flatMap { intent: I -> Observable.just(intentProcessorLogic(intent)).concatMapIterable { it -> it } }
     }
 }
