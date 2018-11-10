@@ -4,10 +4,11 @@ import com.devtrentoh.sampleapp.ui.main.MainModel
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainIntent
 import com.devtrentoh.sampleapp.ui.main.mvi.components.MainResult
 import com.trent.simplemvi.mvi.MviProcessorHolder
+import com.trent.simplemvi.mvi.MviProcessorHolderImpl
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 
-class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<MainIntent, MainResult> {
+class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult> {
 
     private val openAddTodoIntentProcessor =
         { intent: MainIntent.OpenAddTodoIntent -> Observable.just(MainResult.OpenAddTodoResult) }
