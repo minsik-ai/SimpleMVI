@@ -52,6 +52,8 @@ class MainProcessorHolder(model: MainModel) : MviProcessorHolder<MainIntent, Mai
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
 ```
 
+**New in 0.8.3** Extend `ProcessorHolder` from `MviProcessorHolderImpl` for less boilerplate code.
+
 Create a `ViewModel` & `View` as well.
 
 ```
