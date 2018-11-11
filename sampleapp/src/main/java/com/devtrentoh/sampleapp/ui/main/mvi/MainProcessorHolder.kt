@@ -9,8 +9,8 @@ import io.reactivex.ObservableTransformer
 
 class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult>() {
 
-    override val intentProcessorLogic: (MainIntent) -> List<MainResult> = { intent ->
-        when (intent) {
+    override fun intentProcessorLogic(intent: MainIntent): Pair<List<MainResult>, Observable<MainResult>?> {
+        val syncResults = when (intent) {
             is OpenAddTodoIntent -> listOf(OpenAddTodoResult)
             is ApplyAddTodoIntent -> {
                 model.addItem(intent.description)
@@ -34,5 +34,7 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl
             }
             is CancelTodoEditIntent -> listOf(SyncTodoListResult(model.getItemList(), null))
         }
+
+        return Pair(syncResults, null)
     }
 }
