@@ -2,12 +2,12 @@ package com.devtrentoh.sampleapp.ui.main.mvi
 
 import com.devtrentoh.sampleapp.ui.main.MainModel
 import com.devtrentoh.sampleapp.ui.main.mvi.components.*
-import com.trent.simplemvi.mvi.MviProcessorHolderImpl
+import com.trent.simplemvi.mvi.MviProcessorHolder
 import io.reactivex.Observable
 
-class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult>() {
+class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<MainIntent, MainResult> {
 
-    override fun intentProcessorLogic(intent: MainIntent): Pair<List<MainResult>, Observable<MainResult>?> {
+    override fun intentProcessor(intent: MainIntent): Pair<List<MainResult>, Observable<MainResult>?> {
         val syncResults = when (intent) {
             is OpenAddTodoIntent -> listOf(OpenAddTodoResult)
             is ApplyAddTodoIntent -> {

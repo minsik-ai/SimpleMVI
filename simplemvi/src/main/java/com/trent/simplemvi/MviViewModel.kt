@@ -27,8 +27,16 @@ abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(
 
     fun states(): Observable<S> {
         return intentsSubject
-            .compose(processorHolder.intentProcessor)
+            .compose(this::processToObservable)
             .scan(cachedState ?: initialState, reducerHolder.resultReducer)
             .doOnNext { cachedState = it }
+    }
+
+    private fun processToObservable(intents: Observable<I>) = intents.flatMap { intent: I ->
+        val (sync, asyncObservable) = processorHolder.intentProcessor(intent)
+        val syncObservable = Observable.just(sync).concatMapIterable { it -> it }
+
+        if (asyncObservable != null) Observable.merge(syncObservable, asyncObservable)
+        else syncObservable
     }
 }
