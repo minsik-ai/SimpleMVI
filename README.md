@@ -48,13 +48,13 @@ sealed class MainViewState : MviViewState
 
 Also create other classes that extend from `MviProcessorHolder`, `MviReducerHolder`.
 
+**New in 0.8.3 :** Extend `ProcessorHolder` from `MviProcessorHolderImpl` for less boilerplate code.
+
 ```Kotlin
 class MainProcessorHolder(model: MainModel) : MviProcessorHolder<MainIntent, MainResult>
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
 ```
-
-**New in 0.8.3 :** Extend `ProcessorHolder` from `MviProcessorHolderImpl` for less boilerplate code.
 
 Create a `ViewModel` & `View` as well.
 
