@@ -95,10 +95,9 @@ I recommend you to find your workflow as well.
 2. Sketch possible states of the view with `ViewState`.
 3. Configure `render()` method of `MainView` such that view is drawn correctly according to `ViewState`.
 4. Sketch possible actions that user will take to change the view with `Intent`.
-5. Configure `intents()` method of `MainView` such that user actions will be passed properly to `MainViewModel`.
-6. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent`.
-7. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well.
-8. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
+5. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent` to `intentsSubject`, passing it to `MainProcessorHolder`.
+6. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well. This result will be passed to `MainReducerHolder`.
+7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
 
 After initial configuration, you will find that modification is a breeze.
 
