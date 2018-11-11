@@ -28,7 +28,7 @@ abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(
     fun states(): Observable<S> {
         return intentsSubject
             .compose(this::processToObservable)
-            .scan(cachedState ?: initialState, reducerHolder.resultReducer)
+            .scan(cachedState ?: initialState, reducerHolder::resultReducer)
             .doOnNext { cachedState = it }
     }
 

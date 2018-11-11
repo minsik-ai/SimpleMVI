@@ -2,10 +2,10 @@ package com.devtrentoh.sampleapp.ui.main.mvi
 
 import com.devtrentoh.sampleapp.ui.main.mvi.components.*
 import com.trent.simplemvi.mvi.MviReducerHolder
-import io.reactivex.functions.BiFunction
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState> {
-    override val resultReducer = BiFunction<MainViewState, MainResult, MainViewState> { prevState, newResult ->
+    
+    override fun resultReducer(prevState: MainViewState, newResult: MainResult): MainViewState =
         when (prevState) {
             is TodoListViewState ->
                 when (newResult) {
@@ -29,6 +29,4 @@ class MainReducerHolder : MviReducerHolder<MainResult, MainViewState> {
                     is SyncTodoListResult -> TodoListViewState(newResult.items, null)
                 }
         }
-    }
-
 }

@@ -4,5 +4,5 @@ import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
 
 interface MviReducerHolder<R : MviResult, S : MviViewState> {
-    val resultReducer: Function2<S, R, S>
+    fun resultReducer(prevState: S, newResult: R): S
 }
