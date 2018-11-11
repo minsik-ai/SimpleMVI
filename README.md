@@ -22,7 +22,9 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 
 ### Gradle
 
-```
+From jcenter :
+
+```Groovy
 implementation 'com.trent.simplemvi:simplemvi:0.8.3'
 ```
 
@@ -36,7 +38,7 @@ Let's say we want to create a screen with name `Main`.
 
 Start by creating `sealed class` for each of the required components, `Intent`, `Result` and `ViewState`.
 
-```
+```Kotlin
 sealed class MainIntent : MviIntent
 
 sealed class MainResult : MviResult
@@ -46,7 +48,9 @@ sealed class MainViewState : MviViewState
 
 Also create other classes that extend from `MviProcessorHolder`, `MviReducerHolder`.
 
-```
+**New in 0.8.3 :** Extend `ProcessorHolder` from `MviProcessorHolderImpl` for less boilerplate code.
+
+```Kotlin
 class MainProcessorHolder(model: MainModel) : MviProcessorHolder<MainIntent, MainResult>
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
@@ -54,7 +58,7 @@ class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
 
 Create a `ViewModel` & `View` as well.
 
-```
+```Kotlin
 class MainViewModel(
   processorHolder: MviProcessorHolder<MainIntent, MainResult>,
   reducerHolder: MviReducerHolder<MainResult, MainViewState>
@@ -65,7 +69,7 @@ class MainView(containerView: View, viewModel: MainViewModel) : MviView<MainInte
 
 In your Activity or Fragment, initialize at Activity `onCreate()` with code similar to this.
 
-```
+```Kotlin
 viewModel = ViewModelProviders.of(
   this,
   MviViewModelFactory(
@@ -91,10 +95,9 @@ I recommend you to find your workflow as well.
 2. Sketch possible states of the view with `ViewState`.
 3. Configure `render()` method of `MainView` such that view is drawn correctly according to `ViewState`.
 4. Sketch possible actions that user will take to change the view with `Intent`.
-5. Configure `intents()` method of `MainView` such that user actions will be passed properly to `MainViewModel`.
-6. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent`.
-7. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well.
-8. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
+5. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent` to `intentsSubject`, passing it to `MainProcessorHolder`.
+6. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well. This result will be passed to `MainReducerHolder`.
+7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
 
 After initial configuration, you will find that modification is a breeze.
 
