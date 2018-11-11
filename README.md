@@ -3,6 +3,8 @@
 
 Lightweight Android MVI library for uni-directional architecture.
 
+The goal is to provide a set of APIs and Classes that can conveniently setup a complex screen with many different states in a highly structured manner.
+
 ## What is MVI?
 
 MVI is a uni-directional architecture for Android.
@@ -64,7 +66,9 @@ class MainViewModel(
   reducerHolder: MviReducerHolder<MainResult, MainViewState>
   ) : MviViewModel<MainIntent, MainResult, MainViewState>(processorHolder, reducerHolder)
 
-class MainView(containerView: View, viewModel: MainViewModel) : MviView<MainIntent, MainResult, MainViewState>(viewModel)
+class MainView(
+  containerView: View, viewModel: MainViewModel
+  ) : MviView<MainIntent, MainResult, MainViewState>(viewModel)
 ```
 
 In your Activity or Fragment, initialize at Activity `onCreate()` with code similar to this.
@@ -97,7 +101,7 @@ I recommend you to find your workflow as well.
 4. Sketch possible actions that user will take to change the view with `Intent`.
 5. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent` to `intentsSubject`, passing it to `MainProcessorHolder`.
 6. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well. This result will be passed to `MainReducerHolder`.
-7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`.
+7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`. This resulting view state will be passed to `MainView`, and a new view state will be rendered.
 
 After initial configuration, you will find that modification is a breeze.
 
