@@ -11,14 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devtrentoh.sampleapp.R
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainIntent
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainResult
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState.TextInputViewState
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState.TextInputViewState.TodoAddViewState
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState.TextInputViewState.TodoEditViewState
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState.TodoListViewState
-import com.devtrentoh.sampleapp.ui.main.mvi.components.TodoItem
+import com.devtrentoh.sampleapp.ui.main.mvi.components.*
 import com.trent.simplemvi.MviView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -115,27 +108,27 @@ class MainView(
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
                             ?: throw NullPointerException("No Selected Item")
-                    intentsSubject.onNext(MainIntent.DeleteTodoIntent(selectedItem))
+                    intentsSubject.onNext(DeleteTodoIntent(selectedItem))
                 }
-                ActionButtonL.CANCEL_TODO -> intentsSubject.onNext(MainIntent.CancelTodoEditIntent)
+                ActionButtonL.CANCEL_TODO -> intentsSubject.onNext(CancelTodoEditIntent)
             }
         }
         bottom_action_button_R.setOnClickListener {
             when (currentActionButtonR) {
-                ActionButtonR.OPEN_ADD_TODO -> intentsSubject.onNext(MainIntent.OpenAddTodoIntent)
+                ActionButtonR.OPEN_ADD_TODO -> intentsSubject.onNext(OpenAddTodoIntent)
                 ActionButtonR.OPEN_EDIT_TODO -> {
                     val selectedItem =
                         (currentState as TodoListViewState).selectedItem
                             ?: throw NullPointerException("No Selected Item")
 
-                    intentsSubject.onNext(MainIntent.OpenEditTodoIntent(selectedItem))
+                    intentsSubject.onNext(OpenEditTodoIntent(selectedItem))
                 }
                 ActionButtonR.APPLY_ADD_TODO -> {
-                    intentsSubject.onNext(MainIntent.ApplyAddTodoIntent(text_input.text.toString()))
+                    intentsSubject.onNext(ApplyAddTodoIntent(text_input.text.toString()))
                 }
                 ActionButtonR.APPLY_EDIT_TODO -> {
-                    val editTarget = (currentState as MainViewState.TextInputViewState.TodoEditViewState).editTarget
-                    intentsSubject.onNext(MainIntent.ApplyEditTodoIntent(editTarget, text_input.text.toString()))
+                    val editTarget = (currentState as TodoEditViewState).editTarget
+                    intentsSubject.onNext(ApplyEditTodoIntent(editTarget, text_input.text.toString()))
                 }
             }
         }
@@ -143,8 +136,8 @@ class MainView(
             layoutManager = LinearLayoutManager(containerView?.context)
             adapter = TodoListAdapter(todoDataListSubject, selectedTodoItemSubject,
                 onClickAction = { todoItem, isSelected ->
-                    if (!isSelected) intentsSubject.onNext(MainIntent.SelectTodoIntent(todoItem))
-                    else intentsSubject.onNext(MainIntent.ToggleDoneTodoIntent(todoItem))
+                    if (!isSelected) intentsSubject.onNext(SelectTodoIntent(todoItem))
+                    else intentsSubject.onNext(ToggleDoneTodoIntent(todoItem))
                 }
             )
         }

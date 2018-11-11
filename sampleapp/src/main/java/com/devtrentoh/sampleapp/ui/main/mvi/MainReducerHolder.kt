@@ -1,39 +1,32 @@
 package com.devtrentoh.sampleapp.ui.main.mvi
 
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainResult
-import com.devtrentoh.sampleapp.ui.main.mvi.components.MainViewState
+import com.devtrentoh.sampleapp.ui.main.mvi.components.*
 import com.trent.simplemvi.mvi.MviReducerHolder
 import io.reactivex.functions.BiFunction
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState> {
     override val resultReducer = BiFunction<MainViewState, MainResult, MainViewState> { prevState, newResult ->
         when (prevState) {
-            is MainViewState.TodoListViewState ->
+            is TodoListViewState ->
                 when (newResult) {
-                    MainResult.OpenAddTodoResult -> MainViewState.TextInputViewState.TodoAddViewState
-                    is MainResult.OpenEditTodoResult -> MainViewState.TextInputViewState.TodoEditViewState(newResult.targetItem)
-                    is MainResult.SyncTodoListResult -> prevState.copy(
+                    OpenAddTodoResult -> TodoAddViewState
+                    is OpenEditTodoResult -> TodoEditViewState(newResult.targetItem)
+                    is SyncTodoListResult -> prevState.copy(
                         todoList = newResult.items,
                         selectedItem = newResult.newSelectedItem
                     )
                 }
-            MainViewState.TextInputViewState.TodoAddViewState ->
+            TodoAddViewState ->
                 when (newResult) {
-                    MainResult.OpenAddTodoResult -> prevState // possible error
-                    is MainResult.OpenEditTodoResult -> prevState // possible error
-                    is MainResult.SyncTodoListResult -> MainViewState.TodoListViewState(
-                        newResult.items,
-                        null
-                    )
+                    OpenAddTodoResult -> prevState // possible error
+                    is OpenEditTodoResult -> prevState // possible error
+                    is SyncTodoListResult -> TodoListViewState(newResult.items, null)
                 }
-            is MainViewState.TextInputViewState.TodoEditViewState ->
+            is TodoEditViewState ->
                 when (newResult) {
-                    MainResult.OpenAddTodoResult -> prevState // possible error
-                    is MainResult.OpenEditTodoResult -> prevState // possible error
-                    is MainResult.SyncTodoListResult -> MainViewState.TodoListViewState(
-                        newResult.items,
-                        null
-                    )
+                    OpenAddTodoResult -> prevState // possible error
+                    is OpenEditTodoResult -> prevState // possible error
+                    is SyncTodoListResult -> TodoListViewState(newResult.items, null)
                 }
         }
     }
