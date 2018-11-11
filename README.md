@@ -27,7 +27,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 From jcenter :
 
 ```Groovy
-implementation 'com.trent.simplemvi:simplemvi:0.8.3'
+implementation 'com.trent.simplemvi:simplemvi:0.9.0'
 ```
 
 RxJava 2 is required.
@@ -48,9 +48,7 @@ sealed class MainResult : MviResult
 sealed class MainViewState : MviViewState
 ```
 
-Also create other classes that extend from `MviProcessorHolder`, `MviReducerHolder`.
-
-**New in 0.8.3 :** Extend `ProcessorHolder` from `MviProcessorHolderImpl` for less boilerplate code.
+Also create other classes that implement `MviProcessorHolder`, `MviReducerHolder`.
 
 ```Kotlin
 class MainProcessorHolder(model: MainModel) : MviProcessorHolder<MainIntent, MainResult>
@@ -101,7 +99,7 @@ I recommend you to find your workflow as well.
 4. Sketch possible actions that user will take to change the view with `Intent`.
 5. Configure callbacks such as `View.setOnClickListener()` correctly such that user actions will trigger correct `Intent` to `intentsSubject`, passing it to `MainProcessorHolder`.
 6. Implement `Result` & `MainProcessorHolder` such that `Intent` can produce correct `Result`. Handle side-effects such as DB & Networking while processing intents as well. This result will be passed to `MainReducerHolder`.
-7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`. This resulting view state will be passed to `MainView`, and a new view state will be rendered.
+7. Implement `MainReducerHolder` such that `Result` will produce correct `ViewState` in combination with previous `ViewState`. This resulting view state will be passed to `MainView`, and the new view state will be rendered.
 
 After initial configuration, you will find that modification is a breeze.
 
