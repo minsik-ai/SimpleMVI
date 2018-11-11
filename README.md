@@ -24,7 +24,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 
 From jcenter :
 
-```
+```Groovy
 implementation 'com.trent.simplemvi:simplemvi:0.8.3'
 ```
 
@@ -38,7 +38,7 @@ Let's say we want to create a screen with name `Main`.
 
 Start by creating `sealed class` for each of the required components, `Intent`, `Result` and `ViewState`.
 
-```
+```Kotlin
 sealed class MainIntent : MviIntent
 
 sealed class MainResult : MviResult
@@ -48,7 +48,7 @@ sealed class MainViewState : MviViewState
 
 Also create other classes that extend from `MviProcessorHolder`, `MviReducerHolder`.
 
-```
+```Kotlin
 class MainProcessorHolder(model: MainModel) : MviProcessorHolder<MainIntent, MainResult>
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
@@ -58,7 +58,7 @@ class MainReducerHolder : MviReducerHolder<MainResult, MainViewState>
 
 Create a `ViewModel` & `View` as well.
 
-```
+```Kotlin
 class MainViewModel(
   processorHolder: MviProcessorHolder<MainIntent, MainResult>,
   reducerHolder: MviReducerHolder<MainResult, MainViewState>
@@ -69,7 +69,7 @@ class MainView(containerView: View, viewModel: MainViewModel) : MviView<MainInte
 
 In your Activity or Fragment, initialize at Activity `onCreate()` with code similar to this.
 
-```
+```Kotlin
 viewModel = ViewModelProviders.of(
   this,
   MviViewModelFactory(
