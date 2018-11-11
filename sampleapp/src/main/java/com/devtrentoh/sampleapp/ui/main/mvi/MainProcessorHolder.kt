@@ -2,10 +2,8 @@ package com.devtrentoh.sampleapp.ui.main.mvi
 
 import com.devtrentoh.sampleapp.ui.main.MainModel
 import com.devtrentoh.sampleapp.ui.main.mvi.components.*
-import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviProcessorHolderImpl
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 
 class MainProcessorHolder(private val model: MainModel) : MviProcessorHolderImpl<MainIntent, MainResult>() {
 

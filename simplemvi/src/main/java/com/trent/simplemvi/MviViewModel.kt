@@ -8,7 +8,6 @@ import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(

@@ -3,7 +3,6 @@ package com.trent.simplemvi.mvi
 import com.trent.simplemvi.mvi.components.MviIntent
 import com.trent.simplemvi.mvi.components.MviResult
 import io.reactivex.Observable
-import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
 abstract class MviProcessorHolderImpl<I : MviIntent, R : MviResult> : MviProcessorHolder<I, R> {
