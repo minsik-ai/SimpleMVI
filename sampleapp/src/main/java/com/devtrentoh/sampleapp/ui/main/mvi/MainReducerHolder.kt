@@ -4,7 +4,7 @@ import com.devtrentoh.sampleapp.ui.main.mvi.components.*
 import com.trent.simplemvi.mvi.MviReducerHolder
 
 class MainReducerHolder : MviReducerHolder<MainResult, MainViewState> {
-    
+
     override fun resultReducer(prevState: MainViewState, newResult: MainResult): MainViewState =
         when (prevState) {
             is TodoListViewState ->

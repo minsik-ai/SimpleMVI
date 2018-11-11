@@ -3,11 +3,11 @@ package com.devtrentoh.sampleapp.ui.main.mvi
 import com.devtrentoh.sampleapp.ui.main.MainModel
 import com.devtrentoh.sampleapp.ui.main.mvi.components.*
 import com.trent.simplemvi.mvi.MviProcessorHolder
-import io.reactivex.Observable
+import com.trent.simplemvi.mvi.ProcessResults
 
 class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<MainIntent, MainResult> {
 
-    override fun intentProcessor(intent: MainIntent): Pair<List<MainResult>, Observable<MainResult>?> {
+    override fun intentProcessor(intent: MainIntent): ProcessResults<MainResult> {
         val syncResults = when (intent) {
             is OpenAddTodoIntent -> listOf(OpenAddTodoResult)
             is ApplyAddTodoIntent -> {
@@ -33,6 +33,6 @@ class MainProcessorHolder(private val model: MainModel) : MviProcessorHolder<Mai
             is CancelTodoEditIntent -> listOf(SyncTodoListResult(model.getItemList(), null))
         }
 
-        return Pair(syncResults, null)
+        return ProcessResults(syncResults)
     }
 }

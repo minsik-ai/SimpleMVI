@@ -5,5 +5,7 @@ import com.trent.simplemvi.mvi.components.MviResult
 import io.reactivex.Observable
 
 interface MviProcessorHolder<I : MviIntent, R : MviResult> {
-    fun intentProcessor(intent: I): Pair<List<R>, Observable<R>?>
+    fun intentProcessor(intent: I): ProcessResults<R>
 }
+
+data class ProcessResults<R : MviResult>(val sync: List<R>, val async: Observable<R>? = null)
