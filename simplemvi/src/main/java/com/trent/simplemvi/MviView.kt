@@ -41,14 +41,14 @@ abstract class MviView<I : MviIntent, R : MviResult, S : MviViewState>(private v
     private val disposables = CompositeDisposable()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
+    open fun onStart() {
         disposables.add(viewModel.states().subscribe(this::render))
         // Pass the UI's intents to the ViewModel
         disposables.add(viewModel.processIntents(intents()))
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
+    open fun onStop() {
         disposables.clear()
     }
 }
