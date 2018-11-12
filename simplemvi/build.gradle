@@ -7,8 +7,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-def projectVersionCode = 5
-def projectVersionName = "0.9.0"
+def projectVersionCode = 6
+def projectVersionName = "0.9.1"
 
 android {
     compileSdkVersion 28
