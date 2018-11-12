@@ -50,7 +50,8 @@ abstract class MviViewModel<I : MviIntent, R : MviResult, S : MviViewState>(
 
     private fun processToObservable(intents: Observable<I>) = intents.flatMap { intent: I ->
         val (sync, asyncObservable) = processorHolder.intentProcessor(intent)
-        val syncObservable = Observable.just(sync).concatMapIterable { it -> it }
+        val syncObservable =
+            if (sync.isNotEmpty()) Observable.just(sync).concatMapIterable { it -> it } else Observable.empty()
 
         if (asyncObservable != null) Observable.merge(syncObservable, asyncObservable)
         else syncObservable
