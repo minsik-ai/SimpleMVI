@@ -24,4 +24,4 @@ interface MviProcessorHolder<I : MviIntent, R : MviResult> {
     fun intentProcessor(intent: I): ProcessResults<R>
 }
 
-data class ProcessResults<R : MviResult>(val sync: List<R>, val async: Observable<R>? = null)
+data class ProcessResults<out R : MviResult>(val sync: List<R>, val async: Observable<out R>? = null)
