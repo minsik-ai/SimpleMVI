@@ -27,7 +27,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 From jcenter :
 
 ```Groovy
-implementation 'com.trent.simplemvi:simplemvi:0.9.2'
+implementation 'com.trent.simplemvi:simplemvi:0.9.3'
 ```
 
 RxJava 2 is required.
