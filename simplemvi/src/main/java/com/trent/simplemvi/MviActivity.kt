@@ -17,10 +17,7 @@
 package com.trent.simplemvi
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.trent.simplemvi.mvi.MviProcessorHolder
 import com.trent.simplemvi.mvi.MviReducerHolder
@@ -28,19 +25,19 @@ import com.trent.simplemvi.mvi.components.MviIntent
 import com.trent.simplemvi.mvi.components.MviResult
 import com.trent.simplemvi.mvi.components.MviViewState
 
-abstract class MviFragment<I : MviIntent, R : MviResult, S : MviViewState, VM : MviViewModel<I, R, S>>(
+abstract class MviActivity<I : MviIntent, R : MviResult, S : MviViewState, VM : MviViewModel<I, R, S>>(
     private val layoutId: Int,
     private val viewModelClass: Class<VM>,
     private val lazyProcessorHolder: () -> MviProcessorHolder<I, R>,
     private val lazyReducerHolder: () -> MviReducerHolder<R, S>,
-    private val lazyView: (fragment: MviFragment<I, R, S, VM>, viewModel: VM) -> MviView<I, R, S>
-) : Fragment() {
+    private val lazyView: (activity: MviActivity<I, R, S, VM>, viewModel: VM) -> MviView<I, R, S>
+) : FragmentActivity() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(layoutId, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        setContentView(layoutId)
+
         val viewModel = ViewModelProviders.of(
             this,
             MviViewModelFactory(lazyProcessorHolder(), lazyReducerHolder())
