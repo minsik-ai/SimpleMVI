@@ -27,7 +27,7 @@ This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
 From jcenter :
 
 ```Groovy
-implementation 'com.trent.simplemvi:simplemvi:0.9.3'
+implementation 'com.trent.simplemvi:simplemvi:0.9.4'
 ```
 
 RxJava 2 is required.
@@ -87,6 +87,8 @@ MainView(this.view, viewModel).apply {
 ```
 
 You may need more methods & parameters for your classes depending on how you initialize your View references etc.
+
+Use `MviActivity` or `MviFragment` for faster setup.
 
 ### Configuration Workflow
 
