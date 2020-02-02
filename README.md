@@ -18,7 +18,7 @@ This library takes a simplified & practical approach for configuring MVI for rea
              ---------------------- MviViewModel ----------------------
 ```
 
-This video explains it well : https://www.youtube.com/watch?v=64rQ9GKphTg
+Explained well in this video : https://www.youtube.com/watch?v=64rQ9GKphTg ([Benoît Quenaudon](https://benoitquenaudon.com/))
 
 ## Setup
 
